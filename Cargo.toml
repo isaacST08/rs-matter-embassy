@@ -8,22 +8,25 @@ exclude = ["examples"]
 
 [patch.crates-io]
 #rs-matter = { git = "https://github.com/project-chip/rs-matter" }
-rs-matter = { git = "https://github.com/sysgrok/rs-matter", branch = "next" }
+#rs-matter = { git = "https://github.com/sysgrok/rs-matter", branch = "next" }
+rs-matter = { git = "https://github.com/sysgrok/rs-matter", branch = "new-mbedtls" }
 #rs-matter = { path = "../../rs-matter/rs-matter" }
 rs-matter-stack = { git = "https://github.com/sysgrok/rs-matter-stack.git", branch = "next" }
 #rs-matter-stack = { path = "../../rs-matter-stack" }
-openthread = { git = "https://github.com/sysgrok/openthread.git", branch = "next" }
+#openthread = { git = "https://github.com/sysgrok/openthread.git", branch = "next" }
+openthread = { git = "https://github.com/esp-rs/openthread.git", branch = "update-deps-post-gets-in" }
 #openthread = { path = "../../../openthread/openthread" }
-nrf-sdc = { git = "https://github.com/alexmoon/nrf-sdc.git", rev = "43df6b8b0affeacd9cb4094a3ab4f81576554887" }
-nrf-mpsl = { git = "https://github.com/alexmoon/nrf-sdc.git", rev = "43df6b8b0affeacd9cb4094a3ab4f81576554887" }
+nrf-sdc = { git = "https://github.com/alexmoon/nrf-sdc.git", rev = "08620f00fa54e1423c4d54d2da073fb819602d27" }
+nrf-mpsl = { git = "https://github.com/alexmoon/nrf-sdc.git", rev = "08620f00fa54e1423c4d54d2da073fb819602d27" }
 nrf-802154 = { git = "https://github.com/sysgrok/nrf-802154" }
-esp-radio = { git = "https://github.com/esp-rs/esp-hal", rev = "e156b5453a8adc123b7a8b6aa08e0698ec87dfe8" }
-esp-hal = { git = "https://github.com/esp-rs/esp-hal", rev = "e156b5453a8adc123b7a8b6aa08e0698ec87dfe8" }
 #esp-radio = { path = "../../../esp-hal/esp-radio" }
 #esp-hal = { path = "../../../esp-hal/esp-hal" }
 
+[patch.'https://github.com/esp-rs/mbedtls-rs']
+mbedtls-rs-sys = { git = "https://github.com/esp-rs/esp-mbedtls", branch = "control-what-gets-in" }
+
 [profile.release]
-opt-level = "s"
+opt-level = "z"
 
 [profile.dev]
 debug = true
