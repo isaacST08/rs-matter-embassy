@@ -143,9 +143,9 @@ impl super::WifiDriver for RpWifiDriver<'_> {
             &mut pio.common,
             pio.sm0,
             // NOTE: There is a BLE packet corruption bug with yet-unknown reason.
-            // Lowering the pio-SPI clock by 8x seems to fix it or at least makes it
+            // Lowering the pio-SPI clock by 32x seems to fix it or at least makes it
             // rare enough so that it does not happen during the BLE commissioning.
-            cyw43_pio::DEFAULT_CLOCK_DIVIDER * 8,
+            cyw43_pio::DEFAULT_CLOCK_DIVIDER * 32,
             pio.irq0,
             cs,
             self.dio.reborrow(),
@@ -162,9 +162,17 @@ impl super::WifiDriver for RpWifiDriver<'_> {
         )
         .await;
 
-        Self::init_net_controller(&mut net_device, &mut net_controller, self.fmw_clm).await;
-
         let mut runner = pin!(runner.run());
+
+        {
+            let mut init_task = pin!(Self::init_net_controller(&mut net_device, &mut net_controller, self.fmw_clm));
+
+            match select(&mut runner, &mut init_task).await {
+                First(_) => return Err(Error::from(crate::matter::error::ErrorCode::Failure)),
+                Second(_) => {}
+            }
+        }
+
         let mut task = pin!(task.run(net_device, Cyw43WifiController::new(net_controller),));
 
         match select(&mut runner, &mut task).await {
@@ -190,9 +198,9 @@ impl super::WifiCoexDriver for RpWifiDriver<'_> {
             &mut pio.common,
             pio.sm0,
             // NOTE: There is a BLE packet corruption bug with yet-unknown reason.
-            // Lowering the pio-SPI clock by 8x seems to fix it or at least makes it
+            // Lowering the pio-SPI clock by 32x seems to fix it or at least makes it
             // rare enough so that it does not happen during the BLE commissioning.
-            cyw43_pio::DEFAULT_CLOCK_DIVIDER * 8,
+            cyw43_pio::DEFAULT_CLOCK_DIVIDER * 32,
             pio.irq0,
             cs,
             self.dio.reborrow(),
@@ -210,9 +218,17 @@ impl super::WifiCoexDriver for RpWifiDriver<'_> {
         )
         .await;
 
-        Self::init_net_controller(&mut net_device, &mut net_controller, self.fmw_clm).await;
-
         let mut runner = pin!(runner.run());
+
+        {
+            let mut init_task = pin!(Self::init_net_controller(&mut net_device, &mut net_controller, self.fmw_clm));
+
+            match select(&mut runner, &mut init_task).await {
+                First(_) => return Err(Error::from(crate::matter::error::ErrorCode::Failure)),
+                Second(_) => {}
+            }
+        }
+
         let mut task = pin!(task.run(
             net_device,
             Cyw43WifiController::new(net_controller),
@@ -242,9 +258,9 @@ impl super::BleDriver for RpWifiDriver<'_> {
             &mut pio.common,
             pio.sm0,
             // NOTE: There is a BLE packet corruption bug with yet-unknown reason.
-            // Lowering the pio-SPI clock by 8x seems to fix it or at least makes it
+            // Lowering the pio-SPI clock by 32x seems to fix it or at least makes it
             // rare enough so that it does not happen during the BLE commissioning.
-            cyw43_pio::DEFAULT_CLOCK_DIVIDER * 8,
+            cyw43_pio::DEFAULT_CLOCK_DIVIDER * 32,
             pio.irq0,
             cs,
             self.dio.reborrow(),

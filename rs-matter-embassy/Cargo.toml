@@ -209,7 +209,7 @@ esp-hal = { version = "1", optional = true, features = ["unstable"] }
 # Only necessary when `rs-matter-embassy` is providing extra-sugar for the RPi Pico W MCU
 cyw43 = { version = "0.7", optional = true, features = ["firmware-logs", "bluetooth"] }
 cyw43-pio = { version = "0.10", optional = true }
-embassy-rp = { version = "0.10", optional = true, features = ["unstable-pac", "rp2040"] }
+embassy-rp = { version = "0.10", optional = true, features = ["unstable-pac", "rp235xa"] }
 embassy-net-driver-channel = { version = "0.4", optional = true }
 
 # Only necessary when `rs-matter-embassy` is providing extra-sugar for Nordic silicon
